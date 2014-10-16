@@ -172,3 +172,19 @@ class ReportTest(TestCase):
     Report(user=u,type=ReportType.objects.get(id=13),date_created=date.today()).save()
     response = self.client.get(reverse('report',args=(13,)))
     self.assertContains(response, "You have already completed a ")
+
+
+### Tests correct operation of export feature, also make sure user identities remain anonymous
+class ExportTest(TestCase):
+  def test_aggregate_export(self):
+    setUp(self)
+    self.logged_in = self.client.login(username="mhapp", password="mhapp")
+    Report(user=User.objects.get(username="mhapp"),type=ReportType.objects.get(id=13),date_created=date.today()).save()
+    response = self.client.get(reverse('admin_export'))
+    self.assertContains(response, "WHO-5")
+  def test_aggregate_export_not_contain_name_or_identity(self):
+    setUp(self)
+    self.logged_in = self.client.login(username="mhapp", password="mhapp")
+    Report(user=User.objects.get(username="mhapp"),type=ReportType.objects.get(id=13),date_created=date.today()).save()
+    response = self.client.get(reverse('admin_export'))
+    self.assertNotContains(response, "mhapp")

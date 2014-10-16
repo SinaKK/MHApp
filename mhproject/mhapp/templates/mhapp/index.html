@@ -1,7 +1,7 @@
 {% extends "mhapp/base.html" %}
 
 {% block title %}Mental Health Thermometer{% endblock %}
-
+{% load staticfiles %}
 {% block content %}
 
 <head>
@@ -76,6 +76,8 @@
     </div>
     <div class="row">
       {{welcome_content|safe}}
+      <p>
+      The system is fairly intuitive to use, however, for a more in depth usage guide, please refer to the link <a href="{% static "MentalHealthThermometerUsageGuide.pdf" %}">here</a></p>
     </div>
   </div>
 </div>

@@ -10,6 +10,25 @@ class MyRegistrationForm(UserCreationForm):
 	class Meta:
 		model = User
 		fields = ('username', 'email', 'password1', 'password2')
+	def clean_username(self):
+		un = self.cleaned_data['username']
+		try:
+			User.objects.get(username__iexact=un)
+			raise forms.ValidationError("Username is already in use.")
+		except User.DoesNotExist:
+			pass
+		return un
+		
+	def clean_email(self):
+		email = self.cleaned_data['email']
+		try:
+			User.objects.get(email__iexact=email)
+			raise forms.ValidationError("Email is already in use.")
+		except User.DoesNotExist:
+			pass
+		return email
+
+			
 
 class ProfileForm(ModelForm):
 	class Meta:
@@ -23,6 +42,21 @@ class EditUserForm(ModelForm):
 	class Meta:
 		model = User
 		fields = ('email',)
+
+	def __init__(self, *args, **kwargs):
+		self.user = kwargs['instance']
+		super(EditUserForm,self).__init__(*args,**kwargs)
+		
+	def clean_email(self):
+		email = self.cleaned_data['email']
+		if self.user.email == email:
+			return email
+		try:
+			User.objects.get(email__iexact=email)
+			raise forms.ValidationError("Email is already in use.")
+		except User.DoesNotExist:
+			pass
+		return email
 
 
 

@@ -10,9 +10,27 @@ django.setup()
 # Create your tests here.
 from mhapp.models import *
 
+TextContent(id=1,name="Home Page Welcome",text="""<p> This application is designed for patients to keep track of their health status. This is simply a tool for patients and should not be a replacement for professional treatment.</br></br>
 
-TextContent(id=1,name="Home Page Welcome",text="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sapien in mi consequat dapibus vulputate a quam. Integer vel enim eget velit consequat iaculis. Vivamus non feugiat leo. Sed ut aliquet risus. Fusce in venenatis odio, ac imperdiet massa. Donec eu efficitur dui. Phasellus dapibus dignissim leo, iaculis placerat massa finibus eget. Ut in lobortis risus, id faucibus lacus. Donec ut sodales erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus interdum ante eleifend posuere egestas. Vestibulum id bibendum tortor, eget ullamcorper odio. Sed finibus, lacus ac sodales imperdiet, augue arcu fermentum lacus, eget lobortis purus enim id purus. Duis rhoncus lectus massa, ut mattis arcu consectetur et. Sed euismod felis mauris, at congue elit porttitor quis. Morbi in urna quam.</p><p>Aenean ut mollis libero. Cras eu pretium erat. Pellentesque nisl leo, porttitor et arcu eu, viverra tempor mi. Fusce in ornare quam, ut condimentum erat. Cras pretium accumsan leo vitae consectetur. Aliquam nec hendrerit nibh. Donec ut tincidunt nisi. Aliquam hendrerit ornare gravida. Nam dapibus id enim et tincidunt. Ut at arcu sem. Sed vel turpis vel massa tempor sagittis. Nullam sed augue et nibh porttitor scelerisque.</p>").save()
-TextContent(id=2,name="Progress Page Description",text="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sapien in mi consequat dapibus vulputate a quam. Integer vel enim eget velit consequat iaculis. Vivamus non feugiat leo. Sed ut aliquet risus. Fusce in venenatis odio, ac imperdiet massa. Donec eu efficitur dui. Phasellus dapibus dignissim leo, iaculis placerat massa finibus eget. Ut in lobortis risus, id faucibus lacus. Donec ut sodales erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus interdum ante eleifend posuere egestas. Vestibulum id bibendum tortor, eget ullamcorper odio. Sed finibus, lacus ac sodales imperdiet, augue arcu fermentum lacus, eget lobortis purus enim id purus. Duis rhoncus lectus massa, ut mattis arcu consectetur et. Sed euismod felis mauris, at congue elit porttitor quis. Morbi in urna quam.</p>").save()
+All data in the system is treated anonymously and information will never be shared unless requested. This is not an actively monitored system.</br></br>
+
+Two different medically recognised scales are used to assist patients, namely, DI-5 (Daily Index) and WHO-5 (World Health Organisation).</br></br>
+
+Patients are to answer questions to these reports every day, the system will store this information, and patients are able to see their results and treatment progress graphically.</br></br>
+</p> """).save()
+TextContent(id=2,name="Progress Page Description",text="""<h4>Legend</h4>
+<br>
+<strong>Deteriorating: </strong>
+<br>Your health is decreasing dangerously.
+<br>
+<strong>Potential for Change: </strong>
+<br>You are in a state where improvements can be made.
+<br>
+<strong>Improving: </strong>
+<br>Your health is currently on track to be healthy.
+<br>
+<strong>Healthy: </strong>
+<br>You are currently in a healthy state!""").save()
 Constants(id=1,name="W_RoM",value=0.89).save()
 Constants(id=2,name="W_SDn",value=5.11).save()
 Constants(id=3,name="W_SDc",value=5.58).save()

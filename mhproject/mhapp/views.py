@@ -6,8 +6,7 @@ import shutil
 import math
 
 import datetime
-from time import mktime, time
-import time
+from time import mktime
 
 from os import listdir
 from os.path import isfile, join, exists, splitext, basename
@@ -393,8 +392,27 @@ def restore_to_default(request):
   TextContent.objects.filter(id__gt=2).delete()
   Constants.objects.filter(id__gt=10).delete()
   Concern.objects.filter(id__gt=10).delete()
-  TextContent(id=1,name="Home Page Welcome",text="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sapien in mi consequat dapibus vulputate a quam. Integer vel enim eget velit consequat iaculis. Vivamus non feugiat leo. Sed ut aliquet risus. Fusce in venenatis odio, ac imperdiet massa. Donec eu efficitur dui. Phasellus dapibus dignissim leo, iaculis placerat massa finibus eget. Ut in lobortis risus, id faucibus lacus. Donec ut sodales erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus interdum ante eleifend posuere egestas. Vestibulum id bibendum tortor, eget ullamcorper odio. Sed finibus, lacus ac sodales imperdiet, augue arcu fermentum lacus, eget lobortis purus enim id purus. Duis rhoncus lectus massa, ut mattis arcu consectetur et. Sed euismod felis mauris, at congue elit porttitor quis. Morbi in urna quam.</p><p>Aenean ut mollis libero. Cras eu pretium erat. Pellentesque nisl leo, porttitor et arcu eu, viverra tempor mi. Fusce in ornare quam, ut condimentum erat. Cras pretium accumsan leo vitae consectetur. Aliquam nec hendrerit nibh. Donec ut tincidunt nisi. Aliquam hendrerit ornare gravida. Nam dapibus id enim et tincidunt. Ut at arcu sem. Sed vel turpis vel massa tempor sagittis. Nullam sed augue et nibh porttitor scelerisque.</p>").save()
-  TextContent(id=2,name="Progress Page Description",text="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sapien in mi consequat dapibus vulputate a quam. Integer vel enim eget velit consequat iaculis. Vivamus non feugiat leo. Sed ut aliquet risus. Fusce in venenatis odio, ac imperdiet massa. Donec eu efficitur dui. Phasellus dapibus dignissim leo, iaculis placerat massa finibus eget. Ut in lobortis risus, id faucibus lacus. Donec ut sodales erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus interdum ante eleifend posuere egestas. Vestibulum id bibendum tortor, eget ullamcorper odio. Sed finibus, lacus ac sodales imperdiet, augue arcu fermentum lacus, eget lobortis purus enim id purus. Duis rhoncus lectus massa, ut mattis arcu consectetur et. Sed euismod felis mauris, at congue elit porttitor quis. Morbi in urna quam.</p>").save()
+  TextContent(id=1,name="Home Page Welcome",text="""<p> This application is designed for patients to keep track of their health status. This is simply a tool for patients and should not be a replacement for professional treatment.</br></br>
+
+All data in the system is treated anonymously and information will never be shared unless requested. This is not an actively monitored system.</br></br>
+
+Two different medically recognised scales are used to assist patients, namely, DI-5 (Daily Index) and WHO-5 (World Health Organisation).</br></br>
+
+Patients are to answer questions to these reports every day, the system will store this information, and patients are able to see their results and treatment progress graphically.</br></br>
+</p> """).save()
+  TextContent(id=2,name="Progress Page Description",text="""<h4>Legend</h4>
+<br>
+<strong>Deteriorating: </strong>
+<br>Your health is decreasing dangerously.
+<br>
+<strong>Potential for Change: </strong>
+<br>You are in a state where improvements can be made.
+<br>
+<strong>Improving: </strong>
+<br>Your health is currently on track to be healthy.
+<br>
+<strong>Healthy: </strong>
+<br>You are currently in a healthy state!""").save()
   Constants(id=1,name="W_RoM",value=0.89).save()
   Constants(id=2,name="W_SDn",value=5.11).save()
   Constants(id=3,name="W_SDc",value=5.58).save()
@@ -684,7 +702,7 @@ def improvB(report, eq):
     if(score + eq > 10.8):
         return 10.8
     else:
-        return eq
+        return score + eq
 
 def whoDB(report, eq):
     #Calculates Deteriorated Boundary for Who-5
@@ -694,7 +712,7 @@ def whoDB(report, eq):
     elif(score - eq < 1):
         return (0,0)
     else:
-        return (0, eq)
+        return (0, score - eq)
 
 
 def whoPC(eq,ncb,wdb,boundaryimproved):
@@ -706,7 +724,7 @@ def whoPC(eq,ncb,wdb,boundaryimproved):
     elif(wdb == 0):
         return (wdb,wdb + boundaryimproved)
     else:
-        return (wdb, wdb + ncb)
+        return (wdb, wdb + ncb - wdb)
 
 def whoIB(report,wdb,wpc,ncb,boundaryimproved):
     #Calculates Improved Boundary for Who-5
@@ -779,6 +797,11 @@ def progressview(request):
         except ObjectDoesNotExist:
             reported = False
 
+    if(Report.objects.filter(user=request.user).count() == 0):
+      reported = False
+    else:
+      reported = True
+
     context = {'user': request.user, 'minD':mindate, 'alldata':alldata, 'reported':reported,'progress_content':TextContent.objects.get(name="Progress Page Description").text}
     return render(request,'mhapp/progresspersonal.html',context)
 
@@ -799,7 +822,7 @@ def email_sent(request):
 	return redirect('home')
 
 #Takes a URL of the format specified in urls.py and checks its validity. Displays data if the URL is one associated with a User and it has not expired.
-@login_required
+
 def share_data(request,temp):
 	try:
 		u = TempURL.objects.get(url=temp)
