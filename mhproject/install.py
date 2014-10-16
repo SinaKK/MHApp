@@ -1,6 +1,10 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from datetime import date
+from django.core.management import setup_environ
+from mhproject import settings
+
+setup_environ(settings)
 
 # Create your tests here.
 from mhapp.models import *

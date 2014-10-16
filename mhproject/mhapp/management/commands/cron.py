@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from mhapp.models import *
 
 
+
 class Command(BaseCommand):
     args = ''
     help = 'Sends email reminders'
