@@ -135,6 +135,8 @@ class AuthenticationAccessTest(TestCase):
     self.assertContains(response, "App Settings")
 
 
+
+### Tests on Progress Page, if correct output is produced based on data available
 class ProgressTest(TestCase):
   def test_progress_no_reports(self):
     setUp(self)
@@ -149,6 +151,7 @@ class ProgressTest(TestCase):
     self.assertNotContains(response, "You have not made any reports!")
 
 
+### Tests whether delete user feature works and if all user data is removed
 class DeleteUserTest(TestCase):
   def test_delete_user(self):
     setUp(self)
@@ -161,6 +164,7 @@ class DeleteUserTest(TestCase):
     self.assertFalse(Report.objects.filter(user=u).exists())
 
 
+### Tests Report System, appropiate error messages
 class ReportTest(TestCase):
   def test_already_submitted_today(self):
     setUp(self)
