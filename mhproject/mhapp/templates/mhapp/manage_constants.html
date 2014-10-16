@@ -1,0 +1,44 @@
+
+{% extends "mhapp/base.html" %}
+
+{% block title %}Manage Constants - MHT{% endblock %}
+{% load add_css %}
+{% block content %}
+
+
+<div>
+        <h1>Manage Constants</h1>
+        <form class="form-horizontal" role="form" action="" method="post">
+
+            {% csrf_token %}
+            <table class="table table-bordered table-condensed">
+              <th>ID</th>
+              <th>Constant</th>
+              <th>Value</th>
+              {{ formset.management_form }}
+              {% for form in formset %}
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+              <tr>
+
+                  <td>{{form.initial.id}}</td>
+                  {% for field in form.visible_fields %}
+
+                        <td>{{ field|addcss:"form-control"}}</td>
+
+                  {% endfor %}
+                </tr>
+                  {%endfor%}
+
+            </table>
+          </br>
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-8"  >
+                    <input type="Submit"  value="Save Changes" id="submitButton" class="btn btn-primary"></input>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

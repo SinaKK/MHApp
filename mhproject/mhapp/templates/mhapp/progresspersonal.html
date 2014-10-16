@@ -1,0 +1,110 @@
+{% extends "mhapp/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<head>
+  <script type="text/javascript">
+	  window.onload = function () {
+		{%for survey in alldata %}
+		$('#chart{{survey.0.id}}').highcharts({
+			chart: {
+				type: 'spline',
+				zoomType: 'x'
+			},
+			title:{
+				text: "{{survey.0.name}} Mental Health Thermometer for {{user}}"
+			},
+			xAxis:{
+				title: {
+					text: 'Date/Session'
+				},
+				type: 'datetime'
+			  },
+			yAxis:{
+				title: {
+					text: '{{survey.0.name}} Score'
+				},
+				plotBands:[{
+					color:'#FF8080',
+					from: {{survey.2.0}},
+					to: {{survey.2.1}},
+					label: {
+						text: 'Deteriorating',
+						align: 'center'
+						}
+					},
+					{
+					color: '#99CCFF',
+					from: {{survey.3.0}},
+					to: {{survey.3.1}},
+					label: {
+						text: 'Potential for Change',
+						align: 'center'
+						}
+					},
+					{
+					color: '#FFFFB3',
+					from: {{survey.4.0}},
+					to: {{survey.4.1}},
+					label: {
+						text: 'Improving',
+						align: 'center'
+						}
+					},
+					{
+					color: '#ADFF85',
+					from: {{survey.5.0}},
+					to: {{survey.5.1}},
+					label: {
+						text: 'Healthy Range',
+						align: 'center'
+						}
+					}],
+				max: 25, <!--TODO: replace with constants.max-->
+				min: 0,
+				tickInterval: 5
+			  },
+
+			series: [
+			  {
+				name: "{{survey.0.name}}",
+				type: "spline",
+				color: "black",
+				data: {{survey.1|safe}}
+			  }
+			  ]
+			});
+			{%endfor %}
+		  }
+
+  </script>
+ <script type="text/javascript" src={% static "highcharts.js" %}></script></head>
+<div class = "container">
+	<div class="page-header">
+		<h1>Your Progress Page <a href="{% url 'email_sent' %}" type="button" class="btn btn-success"> Share Data with Third-Party</a> </h1>
+
+	</div>
+  <div class="col-md-9">
+
+
+  </div>
+	<div class="row">
+	  <div class="col-md-9">
+		{%for survey in alldata %}
+			<div id="chart{{survey.0.id}}" style="min-width: 310px; height: 400px; margin: 0 auto">
+			</div>
+		{%endfor%}
+		{%if not reported%}
+		<p> You have not made any reports! </p>
+		{% else %}
+
+		{% endif %}
+
+
+	  </div>
+	  <div class="col-md-3">
+	  {{progress_content|safe}}</div>
+	</div>
+</div>
+
+{% endblock %}

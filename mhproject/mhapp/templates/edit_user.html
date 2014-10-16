@@ -1,0 +1,61 @@
+{% extends "mhapp/base.html" %}
+{% load add_css %}
+{% block content %}
+<h2>Edit Profile</h2>
+<div class="row">
+	<form class="form-horizontal col-md-6" action="" method="post">
+		{% csrf_token %}
+		{% for field in form1 %}
+		<div class="form-group">
+			{{field.errors }}
+			<label class="col-sm-4 control-label" for="{{ field.auto_id }}"> {{field.label }} </label>
+			<div class="col-sm-8">
+				{{field|addcss:"form-control"}}
+			</div>
+		</div>
+	{% endfor %}
+	{% for field in form2 %}
+	<div class="form-group">
+		{{field.errors }}
+		<label class="col-sm-4 control-label" for="{{ field.auto_id }}"> {{field.label }} </label>
+		<div class="col-sm-8">
+			{{field|addcss:"form-control"}}
+		</div>
+	</div>
+	{% endfor %}
+	<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-6">
+				<input class="btn btn-default form-control" type="submit" value="Save Changes"/>
+			</div>
+	</div>
+	</form>
+</div>
+</br></br>
+
+<div class="row">
+	<div class="col-sm-offset-2 col-sm-6">
+		<button class="btn btn-danger" data-toggle="modal" data-target="#deleteuser">
+			Delete My Account and Data
+		</button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="deleteuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<h4 class="modal-title" id="myModalLabel">Are you Sure?</h4>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to permanently remove your acount and information from the website?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<a href="{% url 'delete_user' %}" type="button" class="btn btn-danger">Delete My Data</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "mhapp/base.html" %}
+
+{% block title %}Mental Health Thermometer{% endblock %}
+
+{% block content %}
+
+<head>
+  <script>
+
+    jQuery(document).ready(function($) {
+      		$(".clickableRow").click(function() {
+            	window.document.location = $(this).attr("href");
+      		});
+		});
+  </script>
+</head>
+<div class="container">
+
+<div class="row">
+	<div class="col-md-3  col-md-push-9">
+    {% if user.is_authenticated %}
+    <div class="row">
+      <h2>Your Profile</h2>
+    </div>
+    <div class="row">
+		<table class="table table-hover">
+      <h4>Pending Reports</h4>
+      {% if pending_reports %}
+      {% if all_reports_done %}
+      <p><i>You have completed all reports for today!</i></p>
+      {% else %}
+      Click below to submit today's reports!
+      {% endif %}
+		  <tbody>
+				{% for pending in pending_reports %}
+					<tr {% if not pending.done %} class='clickableRow' style="cursor:pointer;" href="{% url 'report' type=pending.id %}"{%endif%}>
+						<td>{{ pending.name }} Report</td> <td>{% if pending.done %}<span style="color: green;" class="glyphicon glyphicon-ok"></span>{%endif%}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+      {% endif %}
+
+		</table>
+    </div>
+
+    <div class="row">
+      <h4>Status</h4>
+      <table>
+      <tr><td style="padding-right:10px"><strong>Last Report: </strong></td><td> {{latest}}</td></tr>
+      <tr><td style="padding-right:10px"><strong># of Reports: </strong></td><td> {{num_reports}}</td></tr>
+    </table>
+  </br>
+    </div>
+
+    <div class="row">
+      <h4>Quick Links</h4>
+      <ul>
+        <li ><a href="{% url 'progress' %}">My Progress</a></li>
+        <li ><a href="{% url 'show_user' %}">View</a> / <a href="{% url 'edit_user' %}">Edit</a> Profile</li>
+      </ul>
+    </div>
+
+
+    {% else %}
+  </br></br></br>
+      <div class="alert alert-success aler-block">
+      <h4>You must be logged in to access this site.</h4><br/>
+      Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register_user' %}">register</a> to continue.<br/>
+    </div>
+    {% endif %}
+
+	</div>
+  <div class="col-md-8 col-md-pull-3">
+    <div class="row">
+      <h1>Welcome</h2>
+    </div>
+    <div class="row">
+      {{welcome_content|safe}}
+    </div>
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>{% block title %}Mental Health Thermometer{% endblock %}</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+      body {
+        min-height: 2000px;
+
+      }
+    </style>
+
+  </head>
+{% load staticfiles %}
+{% block content %}
+
+<head>
+  <script type="text/javascript">
+	  window.onload = function () {
+		{%for survey in alldata %}
+		$('#chart{{survey.0.id}}').highcharts({
+			chart: {
+				type: 'spline',
+				zoomType: 'x'
+			},
+			title:{
+				text: "{{survey.0.name}} Progress"
+			},
+			xAxis:{
+				title: {
+					text: 'Date/Session'
+				},
+				type: 'datetime'
+			  },
+			yAxis:{
+				title: {
+					text: '{{survey.0.name}} Score'
+				},
+				plotBands:[{
+					color:'#FF8080',
+					from: {{survey.2.0}},
+					to: {{survey.2.1}},
+					label: {
+						text: 'Deteriorating',
+						align: 'center'
+						}
+					},
+					{
+					color: '#99CCFF',
+					from: {{survey.3.0}},
+					to: {{survey.3.1}},
+					label: {
+						text: 'Potential for Change',
+						align: 'center'
+						}
+					},
+					{
+					color: '#FFFFB3',
+					from: {{survey.4.0}},
+					to: {{survey.4.1}},
+					label: {
+						text: 'Improving',
+						align: 'center'
+						}
+					},
+					{
+					color: '#ADFF85',
+					from: {{survey.5.0}},
+					to: {{survey.5.1}},
+					label: {
+						text: 'Healthy Range',
+						align: 'center'
+						}
+					}],
+				max: 25, <!--TODO: replace with constants.max-->
+				min: 0,
+				tickInterval: 5
+			  },
+
+			series: [
+			  {
+				name: "{{survey.0.name}}",
+				type: "spline",
+				color: "black",
+				data: {{survey.1|safe}}
+			  }
+			  ]
+			});
+			{%endfor %}
+		  }
+
+  </script>
+ <script type="text/javascript" src={% static "highcharts.js" %}></script></head>
+<div class = "container">
+	<div class="page-header">
+		<h1>Mental Health Thermometer - Progress Page</h1>
+	</div>
+	<div class="row">
+	  <div class="col-md-9">
+		{%for survey in alldata %}
+			<div id="chart{{survey.0.id}}" style="min-width: 310px; height: 400px; margin: 0 auto">
+			</div>
+		{%endfor%}
+		{%if not reported%}
+		<p> You have not made any reports! </p>
+		{%endif%}
+
+	  </div>
+	  <div class="col-md-3">
+	  {{progress_content|safe}} </div>
+	</div>
+</div>
+
+{% endblock %}

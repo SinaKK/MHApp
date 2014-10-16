@@ -1,0 +1,11 @@
+{% extends "mhapp/base.html" %}
+
+{% block title %}CSV Admin Download{% endblock %}
+
+{% block content %}
+
+<div class="col-md-8">
+    <a href="{% url 'admin_export' %}" type="button" class="btn btn-success">Download</button>
+</div>
+
+{% endblock %}

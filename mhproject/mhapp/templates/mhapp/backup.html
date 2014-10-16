@@ -1,0 +1,81 @@
+{% extends "mhapp/base.html" %}
+
+{% block title %}Backup The System{% endblock %}
+
+{% block content %}
+<h1>Backup</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <a href="{% url 'backups_backup' %}" type="button" class="btn btn-primary">Backup Now</a>
+  </div>
+</div>
+
+<div class="row"></div>
+
+</br>
+
+<div class="row">
+  <div class="col-md-8">
+    <table class="table table-hover">
+      <th>Backup Name</th><th>Restore</th><th>Delete</th><th>Download</th>
+      {%for b in backups%}
+        <tr>
+          <td>{{b}}</td>
+          <td>
+            <button class="btn btn-info" data-toggle="modal" data-target="#restore{{forloop.counter}}">
+              Restore
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="restore{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Are you Sure?</h4>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to restore the database from the backup: {{b}}?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a href="{% url 'backups_restore' filename=b %}" type="button" class="btn btn-info">Restore</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#delete{{forloop.counter}}">
+              Delete
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="delete{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Are you Sure?</h4>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to permanently remove the backup: {{b}}?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a href="{% url 'backups_delete' filename=b %}" type="button" class="btn btn-danger">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <a href="{% url 'backups_download' filename=b %}" type="button" class="btn btn-success">Download</a>
+          </td>
+        </tr>
+      {%endfor%}
+    </table>
+  </div>
+</div>
+{% endblock %}

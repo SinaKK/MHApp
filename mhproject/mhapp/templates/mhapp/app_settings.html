@@ -1,0 +1,173 @@
+{% extends "mhapp/base.html" %}
+
+{% block title %}App Settings - MHT{% endblock %}
+
+{% block content %}
+<h1>App Settings</h1>
+<h5><strong>Users: </strong>{{num_accounts}} <strong>#Reports: </strong>{{num_reports}}</h5>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <legend>Report Management</legend>
+      <table class="table table-hover table-condensed">
+        {%for t in types %}
+          <tr>
+            <td>{{t.name}}</td>
+            <td><a href="{% url 'manage_report_edit' pk=t.id %}" type="button" class="btn btn-info">Edit</a></td>
+            <td><a href="{% url 'manage_report_delete' pk=t.id %}" type="button" class="btn btn-danger" disabled>Delete</a></td>
+          </tr>
+
+        {%endfor%}
+      </table>
+      <div class="row">
+          <a href="{% url 'manage_report_new' %}" type="button" class="btn btn-primary" style="float:right" disabled>New Report Type</a>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <legend>Export Aggregate Data</legend>
+
+      <div class="row">
+          <a href="{% url 'admin_export' %}" type="button" class="btn btn-primary" style="margin-left:50px">Export Data (.csv)</a>
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+      <legend>Text Content</legend>
+      <table class="table table-hover table-condensed">
+
+        {%for c in textcontents %}
+          <tr>
+            <td>{{c.name}}</td>
+            <td>  <a href="{% url 'manage_text_content' pk=c.pk %}" type="button" class="btn btn-primary" style="float:right">Edit</a></td>
+          </tr>
+        {%endfor%}
+      </table>
+
+    </div>
+
+
+  </div>
+  </br>
+  <div class="row">
+    <div class="col-md-6">
+      <legend>App Constants</legend>
+      <table class="table table-hover table-condensed">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Value</th>
+        {%for c in constants %}
+          <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.name}}</td>
+            <td>{{c.value}}</td>
+          </tr>
+
+        {%endfor%}
+      </table>
+      <div class="row">
+          <a href="{% url 'manage_constants' %}" type="button" class="btn btn-primary" style="float:right">Manage Constants</a>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <legend>Concerns</legend>
+      <table class="table table-hover table-condensed">
+        <th>ID</th>
+        <th>Name</th>
+        {%for c in concerns %}
+          <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.text}}</td>
+          </tr>
+
+        {%endfor%}
+      </table>
+      <div class="row">
+          <a href="{% url 'manage_concerns' %}" type="button" class="btn btn-primary" style="float:right">Manage Concerns</a>
+      </div>
+    </div>
+
+  </div>
+
+  </br>
+
+  <div class="row">
+	<legend>Alerts</legend>
+      <table class="table table-hover table-condensed">
+        <th>ID</th>
+        <th>Question</th>
+		<th>Threshhold</th>
+		<th>Threshold Type</th>
+		<th>Alert Message</th>
+        {%for q in qalerts %}
+          <tr>
+            <td>{{q.id}}</td>
+            <td>{{q.question.text}}</td>
+			<td>{{q.threshold}}</td>
+			<td>{{q.type}}</td>
+			<td>{{q.description}}</td>
+          </tr>
+        {%endfor%}
+      </table>
+	        <table class="table table-hover table-condensed">
+        <th>ID</th>
+        <th>Report Type</th>
+		<th>Threshold</th>
+		<th>Threshold Type</th>
+		<th>Alert Message</th>
+        {%for r in ralerts %}
+          <tr>
+            <td>{{r.id}}</td>
+            <td>{{r.reportType}}</td>
+			<td>{{r.threshold}}</td>
+			<td>{{r.type}}</td>
+			<td>{{r.description}}</td>
+          </tr>
+        {%endfor%}
+      </table>
+      <div class="row">
+          <a href="{% url 'manage_alerts' %}" type="button" class="btn btn-primary" style="float:right">Manage Alerts</a>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <button class="btn-lg btn btn-danger" data-toggle="modal" data-target="#restore">
+          Restore Settings to Default
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="restore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to restore all settings to default?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a href="{% url 'restore_to_default' %}" type="button" class="btn btn-danger">Restore to Default</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}

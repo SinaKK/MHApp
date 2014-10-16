@@ -1,0 +1,33 @@
+{% extends "mhapp/base.html" %}
+
+{% block title %}Backup The System{% endblock %}
+
+{% block content %}
+<h1>Backup</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <a href="{% url 'backups_backup' %}" type="button" class="btn btn-primary">Backup Now</a>
+  </div>
+</div>
+
+<div class="row"></div>
+
+</br>
+
+<div class="row">
+  <div class="col-md-8">
+    <table class="table table-hover">
+      <th>Backup Name</th><th>Restore</th><th>Delete</th><th>Download</th>
+      {%for b in backups%}
+        <tr>
+          <td>{{b}}</td>
+          <td><a href="{% url 'backups_restore' filename=b %}" type="button" class="btn btn-info">Restore</a></td>
+          <td><a href="{% url 'backups_delete' filename=b %}" type="button" class="btn btn-danger">Delete</a></td>
+          <td><a href="{% url 'backups_download' filename=b %}" type="button" class="btn btn-success">Download</a></td>
+        </tr>
+      {%endfor%}
+    </table>
+  </div>
+</div>
+{% endblock %}

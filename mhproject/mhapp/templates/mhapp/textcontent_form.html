@@ -1,0 +1,27 @@
+{% extends "mhapp/base.html" %}
+{% load add_css %}
+{% block content %}
+<h2>Edit Text Content</h2>
+<div class="row">
+  <form class="form-horizontal col-md-6" action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      {{field.errors }}
+      <label class="col-sm-4 control-label" for="{{ field.auto_id }}"> {{field.label }} </label>
+      <div class="col-sm-8">
+        {{field|addcss:"form-control"}}
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-6">
+        <input class="btn btn-default form-control" type="submit" value="Save Changes"/>
+      </div>
+  </div>
+  </form>
+</div>
+</br></br>
+
+{% endblock %}
